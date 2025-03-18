@@ -1,0 +1,63 @@
+package main
+
+import "fmt"
+
+templ Index() {
+    {{var d, _ = getRandomDrink()}}
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{d.Name}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @keyframes circle {
+                from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+                to { transform: rotate(360deg) translateX(60px) rotate(0deg); }
+            }
+            .circle {
+                animation: circle 12s linear infinite;
+            }
+        </style>
+    </head>
+    <body class="bg-blue-100 min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full grid grid-cols-1 md:grid-cols-2">
+            <div class="bg-blue-50 p-8 rounded-2xl relative h-64 md:h-auto">
+                <div class="flex items-center justify-center h-full">
+                    <span class="text-8xl z-20">🍸</span>
+                </div>
+
+                <div class="text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+                    {{var delay = 3}}
+                    for k := range d.Ingredients {
+                        {{var emoji = firstEmoji(k)}}
+                        if len(emoji) > 0 {
+                            {{var style = fmt.Sprintf("animation-delay: -%ds", delay)}}
+                            {{delay += 3}}
+                            <div class="absolute left-1/2 top-1/2 circle" style={style}>{emoji}</div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="p-8 flex flex-col justify-center">
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">{d.Name}</h1>
+                <h3 class="text-3xl font-bold text-gray-800 mb-4">How To?</h3>
+                {d.Instructions}
+                <h4 class="text-3xl font-bold text-gray-800 mb-4">Ingredients</h4>
+                <ul class="space-y-2 text-gray-600">
+                    for k,v := range d.Ingredients {
+                        if len(v) > 0 {
+                            <li>{v} of {k}</li>
+                        }else{
+                            <li>{k}</li>
+                        }
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </body>
+    </html>
+}
