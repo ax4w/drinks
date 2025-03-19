@@ -32,10 +32,10 @@ func getRandomDrink() (drink, bool) {
 		println(err.Error())
 		return drink{}, false
 	}
-	if len(r["drinks"].([]interface{})) == 0 {
+	if len(r["drinks"].([]any)) == 0 {
 		return drink{}, false
 	}
-	r = r["drinks"].([]interface{})[0].(map[string]any)
+	r = r["drinks"].([]any)[0].(map[string]any)
 	d.Name = r["strDrink"].(string)
 	d.Glass = r["strGlass"].(string)
 	d.Alcoholic = strings.ToLower(r["strAlcoholic"].(string)) == "alcoholic"
